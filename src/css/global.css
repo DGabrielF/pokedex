@@ -1,0 +1,17 @@
+@import url(./pokemon.css);
+* {
+  font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+}
+body{
+  background-color: #efefef;
+}
+h1 {
+  padding: 2rem .7rem;
+}
+.content {
+  margin: 1rem 0;
+  height: 100vh;
+
+  background-color: #fff;
+}
