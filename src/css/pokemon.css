@@ -16,6 +16,7 @@
   margin: .5rem;
   padding: .8rem;
   color: #eeeeee;
+  text-transform: capitalize;
   background-color: #14A06F;
   border-radius: 1rem;
   display: flex;
