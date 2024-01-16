@@ -11,13 +11,16 @@ ol, ul, li {
 
 .container {
   padding: 2px;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
 
   background-color: #ffffffaa;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .search {
@@ -27,22 +30,94 @@ ol, ul, li {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-items: center;
+  align-content: center;
   justify-content: end;
   gap: 1vw;
+}
+.search-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(40px);
+}
+#search-input {
+  padding: 2px 4px;
+
+  text-align: start;
+
+  border: 2px solid #000000aa;
+  border-radius: 6px;
 }
 
 .pokemon-list {
   padding: 4px;
   width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 1vh;
 }
 
 .page-switch-buttons-area {
+  padding: 4px;
+
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   gap: .7vw;
+}
+
+.page-switch-buttons-area button {
+  cursor: pointer;
+  
+  height: 34px;
+  width: 34px;
+  
+  border: 2px solid #000000aa;
+  border-radius: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.page-switch-buttons-area button:hover {
+  outline: 1px dashed #000000aa;
+
+  background-color: #00000033;
+}
+
+.separator {
+  height: 4px;
+  width: 100%;
+
+  border-radius: 2px;
+
+  background-color: #000000aa;
+}
+
+svg {
+  height: 20px;
+  width: 20px;
+}
+
+@media only screen and (max-width: 399px) {
+  .search {
+    justify-content: space-between;
+  }
+  #search-input {
+    width: 100%;
+    transform: translateY(-2px);
+  }
+  #search-span {
+    display: none;
+  }
 }
