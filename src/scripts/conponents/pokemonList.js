@@ -3,11 +3,11 @@ import { state } from "../main.js";
 import { cleanOrCreateBox } from "./elementTools.js";
 
 export function pokemonList(pokemons, localMemory) {
+  const cardArea = cleanOrCreateBox("card-area");
   const pokeList = cleanOrCreateBox("pokemon-list");
-
   pokemons.forEach(async pokemon => pokeList.appendChild(await pokeCard(pokemon, localMemory)));
-
-  return pokeList;
+  cardArea.appendChild(pokeList)
+  return cardArea;
 }
 
 async function pokeCard(pokemonReference, localMemory) {

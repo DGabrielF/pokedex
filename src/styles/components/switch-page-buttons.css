@@ -49,3 +49,8 @@
   flex-direction: row;
   gap: .7vw;
 }
+
+#page-number-buttons .current {
+  cursor: default;
+  background-color: #55ff5533;
+}

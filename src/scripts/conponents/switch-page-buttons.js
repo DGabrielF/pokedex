@@ -78,6 +78,7 @@ function createNumberButtons(page = localState.page) {
     button.textContent = i;
     if (i === page.current) {
       button.classList.add("current");
+      button.disabled = true;
     }
     button.addEventListener("click", () => {
       page.current = i;
