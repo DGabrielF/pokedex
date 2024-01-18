@@ -1,17 +1,22 @@
 import { pokeApi } from "./api.js";
+import { createBox } from "./conponents/elementTools.js";
+import { pokemonList } from "./conponents/pokemonList.js";
+import { searchMenu } from "./conponents/search-menu.js";
+import { switchPagesBox, updateSwitchPageButtons } from "./conponents/switch-page-buttons.js";
 
 export const state = {
   api: {
     offset: 0,
-    limit: 8,
+    limit: 4,
     next: null,
     previous: null,
   },
   page: {
     current: 1,
+    maxButtonsShowed: 5,
     maxNumber: null,
-    maxShowed: 1,
-    minShowed: 1, 
+    maxShowed: null,
+    minShowed: null, 
   },
   images: {
     types: {
@@ -35,41 +40,64 @@ export const state = {
         <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.6,107.6,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.29,107.29,0,0,0-26.25-10.86,8,8,0,0,0-7.06,1.48L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.6,107.6,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8.06,8.06,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8.06,8.06,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z" opacity="0.6"></path></svg>`,
       water: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M208,144a80,80,0,0,1-160,0c0-72,80-128,80-128S208,72,208,144Z" opacity="0.2"></path><path d="M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75ZM128,216a72.08,72.08,0,0,1-72-72c0-57.23,55.47-105,72-118,16.53,13,72,60.75,72,118A72.08,72.08,0,0,1,128,216Zm55.89-62.66a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z" opacity="0.6"></path></svg>`,
     },
-    icons: {
-      magnifyingGlass: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" opacity="0.2"></path><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>`,
-      caretLeft: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M160,48V208L80,128Z" opacity="0.2"></path><path d="M163.06,40.61a8,8,0,0,0-8.72,1.73l-80,80a8,8,0,0,0,0,11.32l80,80A8,8,0,0,0,168,208V48A8,8,0,0,0,163.06,40.61ZM152,188.69,91.31,128,152,67.31Z"></path></svg>`,
-      caretRight: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M176,128,96,208V48Z" opacity="0.2"></path><path d="M181.66,122.34l-80-80A8,8,0,0,0,88,48V208a8,8,0,0,0,13.66,5.66l80-80A8,8,0,0,0,181.66,122.34ZM104,188.69V67.31L164.69,128Z"></path></svg>`,
-    },
   },
+  localMemory: [],
 }
 
 async function init() {
-  loadIcons();
+  const page = state.page;
 
-  const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
-  console.log(response)
-  state.api.next = (response.next)?response.next:null;
-  state.api.previous = (response.previous)?response.previous:null;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  state.api.limit = Math.floor(screenWidth/208) * Math.floor(screenHeight/294);
 
-  console.log(state)
-  toggleDisableButton("#previous-page-button", !state.api.previous);
-  toggleDisableButton("#next-page-button", !state.api.next);
+  const container = document.querySelector(".container");
+
+  container.appendChild(searchMenu());
+
+  container.appendChild(createBox());
+  
+  const response = await updateCards(page);
+  
+  container.appendChild(pokemonList(response.results, state.localMemory))
+
+  container.appendChild(createBox());
+
+  container.appendChild(switchPagesBox(page));
+
+  updateSwitchPageButtons(page);
+
 }
 
 init()
 
-function toggleDisableButton(selector, condiion) {
-  const button = document.querySelector(selector);
-  button.disabled = (condiion);
+window.addEventListener('resize', handleSize)
+
+async function updateCards(page) {
+  const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
+  state.api.next = (response.next) ? response.next : null;
+  state.api.previous = (response.previous) ? response.previous : null;
+
+  page.maxNumber = (response.count) % state.api.limit === 0 ? (response.count) / state.api.limit : Math.floor((response.count) / state.api.limit + 1);
+  return response;
 }
 
-function loadIcons() {
-  const searchIcon = document.querySelector("#search-icon");
-  searchIcon.innerHTML = state.images.icons.magnifyingGlass;
+async function handleSize() {
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
 
-  const prevButton = document.querySelector("#previous-page-button");
-  prevButton.innerHTML = state.images.icons.caretLeft;
+  if (state.api.limit !== Math.floor(screenWidth/208) * Math.floor(screenHeight/294)) {
+    const pokeList = document.querySelector(".pokemon-list");
+    if (pokeList) {
+      pokeList.remove()
+    }
+    state.api.limit = Math.floor(screenWidth/208) * Math.floor(screenHeight/294);
+    const response = await updateCards(state.page);
 
-  const nextButton = document.querySelector("#next-page-button");
-  nextButton.innerHTML = state.images.icons.caretRight;
+    const separators = document.querySelectorAll(".separator");
+    const firstSeparator = separators[0];
+
+    firstSeparator.parentNode.insertBefore(pokemonList(response.results, state.localMemory), firstSeparator.nextSibling)
+    console.log(state.api.limit)
+  }
 }

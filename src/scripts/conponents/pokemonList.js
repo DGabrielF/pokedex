@@ -11,22 +11,17 @@ export function pokemonList(pokemons, localMemory) {
 }
 
 async function pokeCard(pokemonReference, localMemory) {
-  console.log("reference", pokemonReference)
-  console.log("memory", localMemory)
   let pokemon;
   const pokemonFound = state.localMemory.some((pokemonSaved) => {
     return pokemonSaved.name === pokemonReference.name;
   })
-  console.log("algum pokemon encontrado?", pokemonFound)
   if (pokemonFound) {
     pokemon = localMemory.find((pokemonSaved)=> {
       return pokemonSaved.name === pokemonReference.name;
     })
-    console.log("pokemon encontrado na memory", pokemon)
   } else {
     pokemon = await pokeApi.getPokeDetail(pokemonReference);
     localMemory.push(pokemon);
-    console.log("armazenando pokemon", pokemon)
   }
 
   const card = document.createElement("div");

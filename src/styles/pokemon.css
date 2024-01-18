@@ -15,6 +15,8 @@
 
 .name {
   padding: 3px;
+  width: 100%;
+  
   text-align: center;
   text-transform: capitalize;
 }
@@ -24,6 +26,7 @@
   width: 100%;
 
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
@@ -36,8 +39,8 @@
 }
 
 .image {
-  width: 95%;
-  aspect-ratio: 1/1;
+  width: 180px;
+  height: 180px;
 
   border: 2px solid #000000aa;
   border-radius: 6px;
