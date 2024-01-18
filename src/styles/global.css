@@ -1,5 +1,6 @@
 @import url("./reset.css");
 @import url("./pokemon.css");
+@import url("./components/switch-page-buttons.css");
 
 body {
   background-color: #efefef;
@@ -102,6 +103,11 @@ ol, ul, li {
   cursor: not-allowed;
   outline: none;
   background-color: #ffffff33;
+}
+#page-number-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: .7vw;
 }
 
 .separator {
