@@ -94,6 +94,15 @@ ol, ul, li {
 
   background-color: #00000033;
 }
+.page-switch-buttons-area button:disabled {
+  cursor: not-allowed;
+  background-color: #ffffff33;
+}
+.page-switch-buttons-area button:disabled:hover {
+  cursor: not-allowed;
+  outline: none;
+  background-color: #ffffff33;
+}
 
 .separator {
   height: 4px;
