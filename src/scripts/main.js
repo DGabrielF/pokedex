@@ -98,6 +98,5 @@ async function handleSize() {
     const firstSeparator = separators[0];
 
     firstSeparator.parentNode.insertBefore(pokemonList(response.results, state.localMemory), firstSeparator.nextSibling)
-    console.log(state.api.limit)
   }
 }
