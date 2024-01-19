@@ -1,4 +1,6 @@
+import { getPokemonFromAPI, state, updateContents } from "../main.js";
 import { cleanOrCreateBox } from "./elementTools.js";
+import { pokemonList } from "./pokemonList.js";
 
 const localState = {
   page: {
@@ -20,10 +22,11 @@ export function switchPagesBox(page = localState.page) {
   const prevButton = document.createElement("button");
   prevButton.innerHTML = localState.images.caretLeft;
   prevButton.id = "previous-page-button";
-  prevButton.addEventListener("click", () => {
+  prevButton.addEventListener("click", async () => {
     page.current -= 1;
-    updateSwitchPageButtons(page);
-  })
+    state.api.offset -= state.api.limit;
+    await updateContents(page)   
+    })
   switchPagesBox.appendChild(prevButton);
 
   const switchPagesButtons = document.createElement("div");
@@ -33,22 +36,20 @@ export function switchPagesBox(page = localState.page) {
   const nextButton = document.createElement("button");
   nextButton.innerHTML = localState.images.caretRight;
   nextButton.id = "next-page-button";
-  nextButton.addEventListener("click", () => {
+  nextButton.addEventListener("click", async () => {
     page.current += 1;
-    updateSwitchPageButtons(page);
+    state.api.offset += state.api.limit;
+    await updateContents(page);
   })
   switchPagesBox.appendChild(nextButton);
 
   return switchPagesBox;
 }
 
-export function updateSwitchPageButtons(page = localState.page) {
-  
+export function updateSwitchPageButtons(page = localState.page) {  
   setShowedButtonsLimit(page);
   toggleDisableButton("#previous-page-button", page.current === 1);
-  toggleDisableButton("#next-page-button", page.current === page.maxNumber);
-  
-  
+  toggleDisableButton("#next-page-button", page.current === page.maxNumber);  
   createNumberButtons(page);
 }
 
@@ -82,7 +83,8 @@ function createNumberButtons(page = localState.page) {
     }
     button.addEventListener("click", () => {
       page.current = i;
-      updateSwitchPageButtons(page);
+      state.api.offset = state.api.limit * (page.current - 1)
+      updateContents(page)
     });
     pageButtonsArea.appendChild(button);
   }

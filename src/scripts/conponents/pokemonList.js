@@ -46,7 +46,7 @@ async function pokeCard(pokemonReference, localMemory) {
   detailBox.appendChild(typesList);
 
   const numberSpan = document.createElement("span");
-  numberSpan.textContent = `#${pokemon.id + 1}`;
+  numberSpan.textContent = `#${pokemon.id}`;
   detailBox.appendChild(numberSpan);
   card.appendChild(detailBox)
 

@@ -8,11 +8,11 @@ export const state = {
   api: {
     offset: 0,
     limit: 4,
-    next: null,
-    previous: null,
   },
   page: {
     current: 1,
+    next: null,
+    previous: null,
     maxButtonsShowed: 5,
     maxNumber: null,
     maxShowed: null,
@@ -57,7 +57,7 @@ async function init() {
 
   container.appendChild(createBox());
   
-  const response = await updateCards(page);
+  const response = await getPokemonFromAPI(page);
   
   container.appendChild(pokemonList(response.results, state.localMemory))
 
@@ -73,13 +73,21 @@ init()
 
 window.addEventListener('resize', handleSize)
 
-async function updateCards(page) {
+export async function getPokemonFromAPI(page) {
   const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
-  state.api.next = (response.next) ? response.next : null;
-  state.api.previous = (response.previous) ? response.previous : null;
+  state.page.next = (response.next) ? response.next : null;
+  state.page.previous = (response.previous) ? response.previous : null;
 
   page.maxNumber = (response.count) % state.api.limit === 0 ? (response.count) / state.api.limit : Math.floor((response.count) / state.api.limit + 1);
   return response;
+}
+
+export async function updateContents(page) {
+  updateSwitchPageButtons(page);
+  const response = await getPokemonFromAPI(page);
+  const separators = document.querySelectorAll(".separator");
+  const firstSeparator = separators[0];
+  firstSeparator.parentNode.insertBefore(pokemonList(response.results, state.localMemory), firstSeparator.nextSibling);
 }
 
 async function handleSize() {
@@ -87,16 +95,12 @@ async function handleSize() {
   const screenHeight = window.innerHeight;
 
   if (state.api.limit !== Math.floor(screenWidth/208) * Math.floor(screenHeight/294)) {
+    state.api.limit = Math.floor(screenWidth/208) * Math.floor(screenHeight/294);
+    
     const pokeList = document.querySelector(".pokemon-list");
     if (pokeList) {
       pokeList.remove()
     }
-    state.api.limit = Math.floor(screenWidth/208) * Math.floor(screenHeight/294);
-    const response = await updateCards(state.page);
-
-    const separators = document.querySelectorAll(".separator");
-    const firstSeparator = separators[0];
-
-    firstSeparator.parentNode.insertBefore(pokemonList(response.results, state.localMemory), firstSeparator.nextSibling)
+    await updateContents(state.page)
   }
 }
