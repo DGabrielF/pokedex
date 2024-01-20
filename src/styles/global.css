@@ -37,7 +37,7 @@ ol, ul, li {
   justify-content: end;
   gap: 1vw;
 }
-.search-icon {
+#search-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,7 +45,7 @@ ol, ul, li {
 
   transform: translateY(40px);
 }
-#search-input {
+#search-menu-input {
   padding: 2px 4px;
 
   text-align: start;
