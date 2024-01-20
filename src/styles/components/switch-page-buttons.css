@@ -1,3 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  user-select: none;
+  font-family: sans-serif;
+}
+
 .page-switch-buttons-area { 
   padding: 4px;
 
@@ -36,11 +45,10 @@
   background-color: #00000033;
 }
 .page-switch-buttons-area button:disabled {
-  cursor: not-allowed;
   background-color: #ffffff33;
 }
 .page-switch-buttons-area button:disabled:hover {
-  cursor: not-allowed;
+  cursor: default;
   outline: none;
   background-color: #ffffff33;
 }

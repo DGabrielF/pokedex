@@ -2,21 +2,13 @@ import { pokeApi } from "./api.js";
 import { createBox } from "./conponents/elementTools.js";
 import { pokemonList } from "./conponents/pokemonList.js";
 import { searchMenu } from "./conponents/search-menu.js";
-import { switchPagesBox, updateSwitchPageButtons } from "./conponents/switch-page-buttons.js";
+import { createNumberButtons, setShownButtonsLimit, switchPagesBox, updateSwitchPageButton } from "./conponents/switch-page-buttons.js";
 
 export const state = {
   api: {
-    offset: 0,
-    limit: 4,
-  },
-  page: {
     current: 1,
-    next: null,
-    previous: null,
-    maxButtonsShowed: 5,
-    maxNumber: null,
-    maxShowed: null,
-    minShowed: null, 
+    offset: 0,
+    limit: null,
   },
   images: {
     types: {
@@ -45,33 +37,69 @@ export const state = {
 }
 
 async function init() {
-  const page = state.page;
-
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   state.api.limit = Math.floor(screenWidth/208) * Math.floor(screenHeight/294);
 
+  
   const container = document.querySelector(".container");
-
+  
   container.appendChild(searchMenu());
-
-  container.appendChild(createBox());
   
-  const response = await getPokemonFromAPI(page);
-  
-  container.appendChild(pokemonList(response.results, state.localMemory))
-
   container.appendChild(createBox());
+  const response = await pokeApi.getPokemons(state.api.offset, state.api.limit)
+  setShownButtonsLimit(response.results, response.count, state.api.limit);  
+  container.appendChild(pokemonList(response.results, state.localMemory));
+  container.appendChild(createBox());
+  mainButtonsSystem(container);
 
-  container.appendChild(switchPagesBox(page));
+  // const response = await getPokemonFromAPI(page);
 
-  updateSwitchPageButtons(page);
-
+  // updateSwitchPageButton(response.results, state);
 }
 
 init()
 
 window.addEventListener('resize', handleSize)
+
+export function mainButtonsSystem(container) {
+  container.appendChild(
+    switchPagesBox({
+      nextPage: handleNextPage,
+      previousPage: handlePreviousPage,
+      updatePage: handlePage,
+    })
+  );
+  createNumberButtons(handlePage);
+}
+
+export async function handleNextPage() {
+  state.api.current += 1;
+  state.api.offset += state.api.limit;
+  const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
+  updatePokemonCards(response.results);
+}
+
+
+export async function handlePreviousPage() {
+  state.api.current -= 1;
+  state.api.offset -= state.api.limit;
+  const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
+  updatePokemonCards(response.results)
+}
+
+export async function handlePage(pageNumber) {
+  state.api.current = pageNumber;
+  state.api.offset = (pageNumber - 1) * state.api.limit;
+  const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
+  updatePokemonCards(response.results)
+}
+
+export function updatePokemonCards(results) {
+  const separators = document.querySelectorAll(".separator");
+  const firstSeparator = separators[0];
+  firstSeparator.parentNode.insertBefore(pokemonList(results, state.localMemory), firstSeparator.nextSibling);
+}
 
 export async function getPokemonFromAPI(page) {
   const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
@@ -83,7 +111,7 @@ export async function getPokemonFromAPI(page) {
 }
 
 export async function updateContents(page) {
-  updateSwitchPageButtons(page);
+  updateSwitchPageButton(page);
   const response = await getPokemonFromAPI(page);
   const separators = document.querySelectorAll(".separator");
   const firstSeparator = separators[0];
@@ -101,6 +129,7 @@ async function handleSize() {
     if (pokeList) {
       pokeList.remove()
     }
-    await updateContents(state.page)
+    const response = await pokeApi.getPokemons(state.api.offset, state.api.limit);
+    updatePokemonCards(response);
   }
 }
