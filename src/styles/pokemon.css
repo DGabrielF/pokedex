@@ -16,9 +16,13 @@
 .name {
   padding: 3px;
   width: 100%;
+
+  border-radius: 6px;
   
+  color: #ffffffee;
   text-align: center;
   text-transform: capitalize;
+  font-weight: bolder;
 }
 
 .details {
@@ -29,6 +33,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.details span {
+  color: #ffffffaa;
+  font-weight: bolder;
 }
 
 .types {
